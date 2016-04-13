@@ -5,14 +5,7 @@ using System.Collections.Generic;
 public class NewestFirstGenerator : BaseGenerator {
 
     public NewestFirstGenerator(Maze maze) : base(maze) { }
-
-    public override void AddStartEndPoints()
-    {
-        base.AddStartEndPoints();
-        maze.mazeCells[0, maze.mazeHeight - 1] |= 8;
-        maze.mazeCells[maze.mazeWidth - 1, 0] |= 4;
-    }
-
+    
     public override IEnumerator Generate()
     {
         bool freeCell = false;

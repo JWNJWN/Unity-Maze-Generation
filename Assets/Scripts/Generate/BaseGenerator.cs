@@ -39,7 +39,7 @@ public class BaseGenerator {
 
     public DIRECTIONS ChooseNextTile(List<DIRECTIONS> availableDirections)
     {
-        return availableDirections[maze.rand.Next(0, availableDirections.Count - 1)];
+        return availableDirections[maze.rand.Next(0, availableDirections.Count)];
     }
 
     public List<DIRECTIONS> CheckSurroundingTiles()

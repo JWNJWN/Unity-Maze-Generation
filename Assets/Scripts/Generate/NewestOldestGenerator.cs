@@ -11,13 +11,6 @@ public class NewestOldestGenerator : BaseGenerator {
 
     int randomChance;
 
-    public override void AddStartEndPoints()
-    {
-        base.AddStartEndPoints();
-        maze.mazeCells[0, maze.mazeHeight - 1] |= 8;
-        maze.mazeCells[maze.mazeWidth - 1, 0] |= 4;
-    }
-
     public override IEnumerator Generate()
     {
         bool freeCell = false;

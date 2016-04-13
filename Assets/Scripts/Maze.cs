@@ -125,6 +125,6 @@ public class Maze : MonoBehaviour {
     {
         renderer.Render(mazeCells);
         meshFilter.sharedMesh = renderer.ToMesh(meshFilter.sharedMesh);
-        meshCollider.sharedMesh = meshFilter.sharedMesh;
+        meshCollider.sharedMesh = renderer.CollMesh();
     }
 }

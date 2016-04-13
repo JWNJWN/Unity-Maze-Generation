@@ -3,12 +3,14 @@
 public class BaseRenderer
 {
     public MeshData meshData;
+    public MeshData collMeshData;
 
     int[,] map;
 
     public BaseRenderer()
     {
         meshData = new MeshData();
+        collMeshData = new MeshData();
     }
 
     public virtual void Render(int[,] map)
@@ -36,6 +38,16 @@ public class BaseRenderer
         return mesh;
     }
 
+    public virtual Mesh CollMesh()
+    {
+        collMeshData.Clear();
+        Mesh mesh = new Mesh();
+
+        DrawQuad(new Vector3(0,0,0), new Vector3(0,map.GetLength(1),0), new Vector3(map.GetLength(0), map.GetLength(1), 0), new Vector3(map.GetLength(0), 0, 0), collMeshData);
+
+        return mesh;
+    }
+
     public void DrawTri(Vector3 v1, Vector3 v2, Vector3 v3)
     {
 
@@ -51,7 +63,7 @@ public class BaseRenderer
         meshData.triangles.Add(meshData.triangles.Count, meshData.vertices[v3]);
     }
 
-    public void DrawQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4)
+    public void DrawQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, MeshData meshData)
     {
         if (!meshData.vertices.ContainsKey(v1))
             meshData.vertices.Add(v1, meshData.vertices.Count);
