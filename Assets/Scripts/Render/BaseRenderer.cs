@@ -1,21 +1,31 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class BaseRenderer
 {
     public MeshData meshData;
     public MeshData collMeshData;
 
-    int[,] map;
+    public Maze maze;
+    List<Vector2> visitedCells;
 
-    public BaseRenderer()
+    public Texture2D texture;
+
+    public BaseRenderer(Maze maze)
     {
+        this.maze = maze;
         meshData = new MeshData();
         collMeshData = new MeshData();
     }
 
-    public virtual void Render(int[,] map)
+    public virtual void Render()
     {
-        this.map = map;
+        meshData.Clear();
+    }
+
+    public virtual void Render(List<Vector2> visitedCells)
+    {
+        this.visitedCells = visitedCells;
         meshData.Clear();
     }
 
@@ -32,6 +42,7 @@ public class BaseRenderer
 
         mesh.vertices = meshData.VertexArray();
         mesh.triangles = meshData.TriangleArray();
+        mesh.uv = meshData.UVArray();
 
         mesh.RecalculateNormals();
 
@@ -43,14 +54,13 @@ public class BaseRenderer
         collMeshData.Clear();
         Mesh mesh = new Mesh();
 
-        DrawQuad(new Vector3(0,0,0), new Vector3(0,map.GetLength(1),0), new Vector3(map.GetLength(0), map.GetLength(1), 0), new Vector3(map.GetLength(0), 0, 0), collMeshData);
+        DrawQuad(new Vector3(0,0,0), new Vector3(0, maze.mazeHeight,0), new Vector3(maze.mazeWidth, maze.mazeHeight, 0), new Vector3(maze.mazeWidth, 0, 0), collMeshData);
 
         return mesh;
     }
 
     public void DrawTri(Vector3 v1, Vector3 v2, Vector3 v3)
     {
-
         if (!meshData.vertices.ContainsKey(v1))
             meshData.vertices.Add(v1, meshData.vertices.Count);
         if (!meshData.vertices.ContainsKey(v2))
@@ -63,7 +73,7 @@ public class BaseRenderer
         meshData.triangles.Add(meshData.triangles.Count, meshData.vertices[v3]);
     }
 
-    public void DrawQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, MeshData meshData)
+    public virtual void DrawQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, MeshData meshData)
     {
         if (!meshData.vertices.ContainsKey(v1))
             meshData.vertices.Add(v1, meshData.vertices.Count);
@@ -81,6 +91,26 @@ public class BaseRenderer
         meshData.triangles.Add(meshData.triangles.Count, meshData.vertices[v1]);
         meshData.triangles.Add(meshData.triangles.Count, meshData.vertices[v3]);
         meshData.triangles.Add(meshData.triangles.Count, meshData.vertices[v4]);
+    }
 
+    public Texture2D GetTexture()
+    {
+        return texture;
+    }
+
+    public static Color hexToColor(string hex)
+    {
+        hex = hex.Replace("0x", "");//in case the string is formatted 0xFFFFFF
+        hex = hex.Replace("#", "");//in case the string is formatted #FFFFFF
+        byte a = 255;//assume fully visible unless specified in hex
+        byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
+        byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
+        byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+        //Only use alpha if the string has enough characters
+        if (hex.Length == 8)
+        {
+            a = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
+        }
+        return new Color32(r, g, b, a);
     }
 }

@@ -1,0 +1,42 @@
+﻿<Levels>
+  <Level>
+    <id>1</id>
+    <name>First Level Pleb</name>
+    <seed>1</seed>
+    <width>100</width>
+    <height>100</height>
+    <personalBest></personalBest>
+  </Level>
+  <Level>
+    <id>2</id>
+    <name>Second Level Pleb</name>
+    <seed>Unique Maze Seeds</seed>
+    <width>5</width>
+    <height>5</height>
+    <personalBest></personalBest>
+  </Level>
+  <Level>
+    <id>3</id>
+    <name>Third Level Pleb</name>
+    <seed>3</seed>
+    <width>10</width>
+    <height>10</height>
+    <personalBest></personalBest>
+  </Level>
+  <Level>
+    <id>4</id>
+    <name>Third Level Pleb</name>
+    <seed>We can have string seeds?</seed>
+    <width>10</width>
+    <height>5</height>
+    <personalBest></personalBest>
+  </Level>
+  <Level>
+    <id>5</id>
+    <name>Third Level Pleb</name>
+    <seed>How Exciting</seed>
+    <width>15</width>
+    <height>25</height>
+    <personalBest></personalBest>
+  </Level>
+</Levels>
