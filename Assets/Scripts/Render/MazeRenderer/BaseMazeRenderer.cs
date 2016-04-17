@@ -15,8 +15,6 @@ public class BaseMazeRenderer
     Texture2D[,] templateCells;
     int textureSize;
 
-    bool[,] test;
-
     public BaseMazeRenderer(Maze maze)
     {
         this.maze = maze;
@@ -27,8 +25,9 @@ public class BaseMazeRenderer
         textureSize = maze.material.GetTexture("_MainTex").width/4;
         templateCells = SplitTemplateTexture();
         texture = new Texture2D(maze.mazeWidth*textureSize, maze.mazeHeight*textureSize);
-        
-}
+        texture.filterMode = FilterMode.Point;
+        texture.mipMapBias = 0f;
+    }
 
     public virtual void Render()
     {
@@ -105,18 +104,18 @@ public class BaseMazeRenderer
 
     public void AddCell(Vector2 newPos, Vector2 oldPos)
     {
-        texture.SetPixels((int)newPos.x * textureSize, (int)newPos.y * textureSize, textureSize, textureSize, templateCells[(int)oldPos.x, (int)oldPos.y].GetPixels(0, 0, textureSize, textureSize));
+        texture.SetPixels((int)newPos.x * textureSize, (int)newPos.y * textureSize, textureSize, textureSize, templateCells[(int)oldPos.x, (int)oldPos.y].GetPixels(0, 0, textureSize ,textureSize));
     }
 
     public static Color hexToColor(string hex)
     {
-        hex = hex.Replace("0x", "");//in case the string is formatted 0xFFFFFF
-        hex = hex.Replace("#", "");//in case the string is formatted #FFFFFF
-        byte a = 255;//assume fully visible unless specified in hex
+        hex = hex.Replace("0x", ""); 
+        hex = hex.Replace("#", ""); 
+        byte a = 255; 
         byte r = byte.Parse(hex.Substring(0, 2), System.Globalization.NumberStyles.HexNumber);
         byte g = byte.Parse(hex.Substring(2, 2), System.Globalization.NumberStyles.HexNumber);
         byte b = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);
-        //Only use alpha if the string has enough characters
+        
         if (hex.Length == 8)
         {
             a = byte.Parse(hex.Substring(4, 2), System.Globalization.NumberStyles.HexNumber);

@@ -11,7 +11,6 @@ public class Maze : MonoBehaviour {
     public int[,] mazeCells;
     public Vector2 startCell, endCell;
 
-
     //Generation Properties
     public enum GenerationType { NewestFirst, Random, NewestRandom, NewestOldest, OldestRandom };
     public GenerationType generationType = GenerationType.NewestFirst;
