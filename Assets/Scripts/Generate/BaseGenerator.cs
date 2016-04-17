@@ -31,6 +31,10 @@ public class BaseGenerator {
 
     public virtual void Generate()
     {
+
+        if (Input.touchCount == 1)
+            maze.isSkipping = true;
+
         bool freeCell = false;
         List<DIRECTIONS> availableDirections = new List<DIRECTIONS>();
         availableDirections = CheckSurroundingTiles(currentPosition);
@@ -73,7 +77,7 @@ public class BaseGenerator {
             branchCells.RemoveAt(index);
         }
 
-        if(branchCells.Count > 0)
+        if (branchCells.Count > 0)
             SelectNextCell();
 
         if (branchCells.Count == 0)

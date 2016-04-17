@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class BaseRenderer
@@ -76,13 +77,25 @@ public class BaseRenderer
     public virtual void DrawQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4, MeshData meshData)
     {
         if (!meshData.vertices.ContainsKey(v1))
+        {
             meshData.vertices.Add(v1, meshData.vertices.Count);
+            meshData.AddUV(v1 / maze.mazeHeight);
+        }
         if (!meshData.vertices.ContainsKey(v2))
+        {
             meshData.vertices.Add(v2, meshData.vertices.Count);
+            meshData.AddUV(v2 / maze.mazeHeight);
+        }
         if (!meshData.vertices.ContainsKey(v3))
+        {
             meshData.vertices.Add(v3, meshData.vertices.Count);
+            meshData.AddUV(v3 / maze.mazeHeight);
+        }
         if (!meshData.vertices.ContainsKey(v4))
+        {
             meshData.vertices.Add(v4, meshData.vertices.Count);
+            meshData.AddUV(v4 / maze.mazeHeight);
+        }
 
         meshData.triangles.Add(meshData.triangles.Count, meshData.vertices[v1]);
         meshData.triangles.Add(meshData.triangles.Count, meshData.vertices[v2]);

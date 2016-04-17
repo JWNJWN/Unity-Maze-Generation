@@ -21,6 +21,7 @@ public class Maze : MonoBehaviour {
     [Range(0, 100)]
     public int splitPercent = 25;
     public bool generated = false;
+    public bool isSkipping = false;
 
     //Seeding
     public string seed;
@@ -30,6 +31,7 @@ public class Maze : MonoBehaviour {
     //Meshing
     MeshFilter meshFilter;
     MeshCollider meshCollider;
+    MeshRenderer meshRenderer;
 
     //Player
     public Camera mainCamera;
@@ -39,7 +41,7 @@ public class Maze : MonoBehaviour {
     //Rendering Properties
     public enum RenderType { Normal };
     public RenderType renderType = RenderType.Normal;
-    new BaseRenderer renderer;
+    new BaseMazeRenderer renderer;
     
     void Awake () {
         Screen.orientation = ScreenOrientation.Portrait;
@@ -51,6 +53,7 @@ public class Maze : MonoBehaviour {
         //Mesh Initialization
         meshFilter = GetComponent<MeshFilter>();
         meshCollider = GetComponent<MeshCollider>();
+        meshRenderer = GetComponent<MeshRenderer>();
 
         //Seeding Initialization
         if (useRandomSeed)
@@ -75,7 +78,7 @@ public class Maze : MonoBehaviour {
 
         //Maze Initialization
         InitializeMaze();
-	}
+    }
 
     void InitializeMaze()
     {
@@ -95,7 +98,7 @@ public class Maze : MonoBehaviour {
         switch(renderType)
         {
             case RenderType.Normal:
-                renderer = new PlainRenderer(this);
+                renderer = new PlainMazeRenderer(this);
                 break;
         }
     }
@@ -123,19 +126,24 @@ public class Maze : MonoBehaviour {
     }
 	
 	void Update () {
-	    if(!generated)
+        if(!generated)
         {
-            generator.Generate();
-            //StartCoroutine(generator.Generate());
-            BuildMesh();
+            if (isSkipping)
+            {
+                while(true)
+                    generator.Generate();
+            }
+            else
+            {
+                generator.Generate();
+            }
         }
-
+        BuildMesh();
     }
 
     void BuildMesh()
     {
         renderer.Render();
         meshFilter.sharedMesh = renderer.ToMesh(meshFilter.sharedMesh);
-        meshCollider.sharedMesh = renderer.CollMesh();
     }
 }

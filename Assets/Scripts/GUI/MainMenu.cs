@@ -49,14 +49,14 @@ public class MainMenu : MonoBehaviour {
         levels = new List<Level>();
         levelObjects = new List<Transform>();
 
-        if(!FB.IsInitialized)
+        /*if(!FB.IsInitialized)
         {
             FB.Init(InitCallback, OnHideUnity);
         }else
         {
             FB.ActivateApp();
             FB.LogInWithReadPermissions(perms, AuthCallback);
-        }
+        }*/
     }
 
     private void InitCallback()
@@ -201,8 +201,8 @@ public class MainMenu : MonoBehaviour {
     {
         PlayerPrefs.SetInt("CurrentMazeID", sceneIndex);
 
-        PlayerPrefs.SetInt("CurrentMazeWidth", levels[sceneIndex].width);
-        PlayerPrefs.SetInt("CurrentMazeHeight", levels[sceneIndex].width);
+        PlayerPrefs.SetInt("CurrentMazeWidth", levels[sceneIndex-1].width);
+        PlayerPrefs.SetInt("CurrentMazeHeight", levels[sceneIndex-1].width);
         Application.LoadLevel(1);
     }   
 }

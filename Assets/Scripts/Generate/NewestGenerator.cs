@@ -1,8 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-
-public class NewestGenerator : BaseGenerator {
+﻿public class NewestGenerator : BaseGenerator {
 
     public NewestGenerator(Maze maze) : base(maze) { }
 

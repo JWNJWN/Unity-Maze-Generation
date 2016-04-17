@@ -52,6 +52,7 @@ public class Player : MonoBehaviour {
 
         gameObject.GetComponent<MeshRenderer>().material.shader = Shader.Find("Unlit/Texture");
         gameObject.GetComponent<MeshRenderer>().material.SetTexture("_MainTex", playerRenderer.GetTexture());
+        maze.mainCamera.orthographicSize = (maze.mazeHeight >= maze.mazeWidth) ? maze.mazeHeight : maze.mazeWidth;
         maze.mainCamera.orthographicSize = Mathf.Clamp(maze.mainCamera.orthographicSize, 5f, (maze.mazeHeight >= maze.mazeWidth) ? maze.mazeHeight : maze.mazeWidth);
     }
 
@@ -68,6 +69,9 @@ public class Player : MonoBehaviour {
 
     void Update()
     {
+        if (!maze.generated)
+            return;
+
         dragSpeed = maze.mainCamera.orthographicSize / 300;
 
         if (Input.touchCount == 1)
