@@ -15,6 +15,8 @@ public class BaseMazeRenderer
     Texture2D[,] templateCells;
     int textureSize;
 
+    bool[,] test;
+
     public BaseMazeRenderer(Maze maze)
     {
         this.maze = maze;
@@ -22,10 +24,11 @@ public class BaseMazeRenderer
         verts = new List<Vector3>();
         uvs = new List<Vector2>();
         tris = new List<int>();
-        textureSize = 16;
+        textureSize = maze.material.GetTexture("_MainTex").width/4;
         templateCells = SplitTemplateTexture();
         texture = new Texture2D(maze.mazeWidth*textureSize, maze.mazeHeight*textureSize);
-    }
+        
+}
 
     public virtual void Render()
     {
@@ -78,6 +81,7 @@ public class BaseMazeRenderer
 
     public Texture2D GetTexture()
     {
+        texture.Apply();
         return texture;
     }
 
@@ -101,7 +105,7 @@ public class BaseMazeRenderer
 
     public void AddCell(Vector2 newPos, Vector2 oldPos)
     {
-        texture.SetPixels((int)newPos.x * textureSize, (int)newPos.y * textureSize, textureSize, textureSize, templateCells[(int)oldPos.x, (int)oldPos.y].GetPixels(0, 0, textureSize ,textureSize));
+        texture.SetPixels((int)newPos.x * textureSize, (int)newPos.y * textureSize, textureSize, textureSize, templateCells[(int)oldPos.x, (int)oldPos.y].GetPixels(0, 0, textureSize, textureSize));
     }
 
     public static Color hexToColor(string hex)

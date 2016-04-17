@@ -70,6 +70,5 @@ public class PlainMazeRenderer : BaseMazeRenderer
                 }
             }
         }
-        texture.Apply();
     }
 }
