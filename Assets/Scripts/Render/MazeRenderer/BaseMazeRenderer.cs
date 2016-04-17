@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 public class BaseMazeRenderer
 {
-    public MeshData meshData;
-
     public Maze maze;
 
     List<Vector3> verts;
@@ -14,6 +12,8 @@ public class BaseMazeRenderer
 
 
     public Texture2D texture;
+    Texture2D[,] templateCells;
+    int textureSize;
 
     public BaseMazeRenderer(Maze maze)
     {
@@ -22,6 +22,9 @@ public class BaseMazeRenderer
         verts = new List<Vector3>();
         uvs = new List<Vector2>();
         tris = new List<int>();
+        textureSize = 16;
+        templateCells = SplitTemplateTexture();
+        texture = new Texture2D(maze.mazeWidth*textureSize, maze.mazeHeight*textureSize);
     }
 
     public virtual void Render()
@@ -51,18 +54,18 @@ public class BaseMazeRenderer
         return mesh;
     }
 
-    public virtual void DrawCell(Vector3 position, Vector2 uvPosition, MeshData meshData)
+    public virtual void DrawCell(Vector3 position)
     {
         int count = verts.Count;
         
         verts.Add(position);
-        uvs.Add(uvPosition / 4f);
-        verts.Add(position + new Vector3(0, 1, 0));
-        uvs.Add((uvPosition + new Vector2(0, 1)) / 4f);
-        verts.Add(position + new Vector3(1, 1, 0));
-        uvs.Add((uvPosition + new Vector2(1, 1)) / 4f);
-        verts.Add(position + new Vector3(1, 0, 0));
-        uvs.Add((uvPosition + new Vector2(1, 0)) / 4f);
+        uvs.Add(new Vector2(0, 0));
+        verts.Add(position + new Vector3(0, maze.mazeHeight, 0));
+        uvs.Add(new Vector2(0, 1));
+        verts.Add(position + new Vector3(maze.mazeWidth, maze.mazeHeight, 0));
+        uvs.Add(new Vector2(1, 1));
+        verts.Add(position + new Vector3(maze.mazeWidth, 0, 0));
+        uvs.Add(new Vector2(1, 0));
 
         tris.Add(count);
         tris.Add(count + 1);
@@ -76,6 +79,29 @@ public class BaseMazeRenderer
     public Texture2D GetTexture()
     {
         return texture;
+    }
+
+    public Texture2D[,] SplitTemplateTexture()
+    {
+        Texture2D[,] tempTex = new Texture2D[4, 4];
+        Texture2D templateTex = maze.material.GetTexture("_MainTex") as Texture2D;
+
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                Texture2D temp = new Texture2D(textureSize, textureSize);
+                temp.SetPixels(0, 0, textureSize, textureSize, templateTex.GetPixels(i * textureSize, j * textureSize, textureSize, textureSize));
+                tempTex[i, j] = temp;
+            }
+        }
+
+        return tempTex;
+    }
+
+    public void AddCell(Vector2 newPos, Vector2 oldPos)
+    {
+        texture.SetPixels((int)newPos.x * textureSize, (int)newPos.y * textureSize, textureSize, textureSize, templateCells[(int)oldPos.x, (int)oldPos.y].GetPixels(0, 0, textureSize ,textureSize));
     }
 
     public static Color hexToColor(string hex)

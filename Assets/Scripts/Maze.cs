@@ -2,7 +2,6 @@
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
-[RequireComponent(typeof(MeshCollider))]
 
 public class Maze : MonoBehaviour {
     
@@ -30,8 +29,10 @@ public class Maze : MonoBehaviour {
 
     //Meshing
     MeshFilter meshFilter;
-    MeshCollider meshCollider;
     MeshRenderer meshRenderer;
+
+    public Material material;
+    public bool rendered = false;
 
     //Player
     public Camera mainCamera;
@@ -52,8 +53,9 @@ public class Maze : MonoBehaviour {
 
         //Mesh Initialization
         meshFilter = GetComponent<MeshFilter>();
-        meshCollider = GetComponent<MeshCollider>();
         meshRenderer = GetComponent<MeshRenderer>();
+
+        material = meshRenderer.material;
 
         //Seeding Initialization
         if (useRandomSeed)
@@ -138,12 +140,16 @@ public class Maze : MonoBehaviour {
                 generator.Generate();
             }
         }
-        BuildMesh();
+        if(!rendered)
+            BuildMesh();
     }
 
     void BuildMesh()
     {
         renderer.Render();
         meshFilter.sharedMesh = renderer.ToMesh(meshFilter.sharedMesh);
+        meshRenderer.material.SetTexture("_MainTex", renderer.GetTexture());
+        if (generated)
+            rendered = true;
     }
 }

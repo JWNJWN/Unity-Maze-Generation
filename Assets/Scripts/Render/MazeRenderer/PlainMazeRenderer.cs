@@ -3,8 +3,6 @@ using System.Collections;
 
 public class PlainMazeRenderer : BaseMazeRenderer
 {
-    private float halfWallWidth = 0.1f;
-
     public PlainMazeRenderer(Maze maze) : base(maze) { }
 
     enum DIRECTION { N, S, E, W };
@@ -13,6 +11,8 @@ public class PlainMazeRenderer : BaseMazeRenderer
     {
         base.Render();
 
+        DrawCell(Vector3.zero);
+
         for (int x = 0; x < maze.mazeWidth; x++) 
         {
             for (int y = 0; y < maze.mazeHeight; y++) 
@@ -20,55 +20,56 @@ public class PlainMazeRenderer : BaseMazeRenderer
                 switch(maze.mazeCells[x, y])
                 {
                     case 0:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(3, 0), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(3, 0));
                         break;
                     case 1:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(3, 1), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(3, 1));
                         break;
                     case 2:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(3, 3), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(3, 3));
                         break;
                     case 3:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(3, 2), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(3, 2));
                         break;
                     case 4:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(0, 0), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(0, 0));
                         break;
                     case 5:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(0, 1), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(0, 1));
                         break;
                     case 6:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(0, 3), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(0, 3));
                         break;
                     case 7:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(0, 2), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(0, 2));
                         break;
                     case 8:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(2, 0), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(2, 0));
                         break;
                     case 9:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(2, 1), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(2, 1));
                         break;
                     case 10:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(2, 3), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(2, 3));
                         break;
                     case 11:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(2, 2), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(2, 2));
                         break;
                     case 12:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(1, 0), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(1, 0));
                         break;
                     case 13:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(1, 1), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(1, 1));
                         break;
                     case 14:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(1, 3), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(1, 3));
                         break;
                     case 15:
-                        DrawCell(new Vector3(x, y, 0), new Vector2(1, 2), meshData);
+                        AddCell(new Vector2(x, y), new Vector2(1, 2));
                         break;
                 }
             }
         }
+        texture.Apply();
     }
 }
