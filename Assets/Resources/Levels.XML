@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Levels>
+  <Level>
+    <id>1</id>
+    <name>First Level Pleb</name>
+    <seed>1</seed>
+    <width>5</width>
+    <height>5</height>
+    <generationType>NewestFirst</generationType>
+    <personalBest>0</personalBest>
+  </Level>
+  <Level>
+    <id>2</id>
+    <name>Second Level Pleb</name>
+    <seed>1</seed>
+    <width>5</width>
+    <height>5</height>
+    <generationType>NewestFirst</generationType>
+    <personalBest>2.239</personalBest>
+  </Level>
+  <Level>
+    <id>3</id>
+    <name>Third? Level Pleb</name>
+    <seed>1</seed>
+    <width>10</width>
+    <height>5</height>
+    <generationType>NewestFirst</generationType>
+    <personalBest>0</personalBest>
+  </Level>
+  <Level>
+    <id>4</id>
+    <name>Fourth Level Pleb</name>
+    <seed>1</seed>
+    <width>5</width>
+    <height>15</height>
+    <generationType>NewestFirst</generationType>
+    <personalBest>0</personalBest>
+  </Level>
+  <Level>
+    <id>1</id>
+    <name>First Level Pleb</name>
+    <seed>1</seed>
+    <width>5</width>
+    <height>5</height>
+    <generationType>NewestFirst</generationType>
+    <personalBest>0</personalBest>
+  </Level>
+  <Level>
+    <id>2</id>
+    <name>Second Level Pleb</name>
+    <seed>1</seed>
+    <width>5</width>
+    <height>5</height>
+    <generationType>NewestFirst</generationType>
+    <personalBest>1.264</personalBest>
+  </Level>
+  <Level>
+    <id>3</id>
+    <name>Third? Level Pleb</name>
+    <seed>1</seed>
+    <width>10</width>
+    <height>5</height>
+    <generationType>NewestFirst</generationType>
+    <personalBest>0</personalBest>
+  </Level>
+  <Level>
+    <id>4</id>
+    <name>Fourth Level Pleb</name>
+    <seed>R</seed>
+    <width>10</width>
+    <height>10</height>
+    <generationType>NewestFirst</generationType>
+    <personalBest>0</personalBest>
+  </Level>
+  <Level>
+    <id>5</id>
+    <name>Fourth Level Pleb</name>
+    <seed>R</seed>
+    <width>25</width>
+    <height>25</height>
+    <generationType>NewestFirst</generationType>
+    <personalBest>0</personalBest>
+  </Level>
+  <Level>
+    <id>6</id>
+    <name>Fourth Level Pleb</name>
+    <seed>R</seed>
+    <width>50</width>
+    <height>50</height>
+    <generationType>NewestFirst</generationType>
+    <personalBest>0</personalBest>
+  </Level>
+</Levels>

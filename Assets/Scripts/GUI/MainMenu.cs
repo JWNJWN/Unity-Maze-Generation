@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using Facebook.Unity;
 using UnityEngine.UI;
+using Facebook.MiniJSON;
 
 using System.Collections.Generic;
-using System.Xml;
 
 public class MainMenu : MonoBehaviour {
 
+    public GameStateManager gameStateManager;
+
     //GUI
-    private string currentMenu = "Main";
+    private string currentMenu;
 
     //Panels
     public Canvas mainMenu;
@@ -21,33 +23,18 @@ public class MainMenu : MonoBehaviour {
 
     private List<Transform> levelObjects;
 
-    //Level Loading
-    public TextAsset levelFile;
-
     //FB
     List<string> perms = new List<string>() { "public_profile", "email", "user_friends" };
     
-    struct Level
-    {
-        public int id;
-        public string name;
-        public string seed;
-        public int width;
-        public int height;
-        public float personalBest;
-
-        public override string ToString()
-        {
-            return "ID: " + id + " Name: " + name + " Seed: " + seed + " Width: " + width + " Height: " + height;
-        }
-    }
-
-    List<Level> levels;
 
     void Awake()
     {
-        levels = new List<Level>();
+        Screen.orientation = ScreenOrientation.Portrait;
+        gameStateManager = GameStateManager.gameStateManager;
+
         levelObjects = new List<Transform>();
+
+
 
         /*if(!FB.IsInitialized)
         {
@@ -100,23 +87,23 @@ public class MainMenu : MonoBehaviour {
 
     void Start()
     {
-        Screen.orientation = ScreenOrientation.Portrait;
         InitiateButtons();
-        GetLevels();
         AddLevelsToUI();
     }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        currentMenu = gameStateManager.gameState.ToString();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             switch (currentMenu)
             {
-                case "Main":
+                case "MainMenu":
                     Application.Quit();
                     break;
                 case "LevelSelect":
-                    currentMenu = "Main";
+                    currentMenu = "MainMenu";
                     break;
             }
         }
@@ -125,60 +112,29 @@ public class MainMenu : MonoBehaviour {
 
     void InitiateButtons()
     {
-        playButton.onClick.AddListener(delegate { currentMenu = "LevelSelect"; });
-    }
-
-    void GetLevels()
-    {
-        XmlDocument levelDoc = new XmlDocument();
-        levelDoc.LoadXml(levelFile.text);
-        XmlNodeList levelsList = levelDoc.GetElementsByTagName("Level");
-
-        foreach(XmlNode levelInfo in levelsList)
-        {
-            XmlNodeList levelContent = levelInfo.ChildNodes;
-            Level tempLevel = new Level();
-            foreach(XmlNode levelItems in levelContent)
-            {
-                switch(levelItems.Name)
-                {
-                    case "id":
-                        tempLevel.id = int.Parse(levelItems.InnerText);
-                        break;
-                    case "name":
-                        tempLevel.name = levelItems.InnerText;
-                        break;
-                    case "seed":
-                        tempLevel.seed = levelItems.InnerText;  
-                        break;
-                    case "width":
-                        tempLevel.width = int.Parse(levelItems.InnerText);
-                        break;
-                    case "height":
-                        tempLevel.height = int.Parse(levelItems.InnerText);
-                        break;
-                }
-            }
-            levels.Add(tempLevel);
-        }
+        playButton.onClick.AddListener(delegate { gameStateManager.gameState = GameStateManager.GameStates.LevelSelect; });
     }
 
     void AddLevelsToUI()
     {
-        foreach(Level level in levels)
+        foreach(GameStateManager.Level level in GameStateManager.gameLevels)
         {
-            Transform tempLevel = (Transform)Instantiate(levelObject);
-            tempLevel.SetParent(levelSelect.transform);
-            tempLevel.localScale = new Vector3(1, 1, 1);
-            tempLevel.localPosition = new Vector3(-350, 600 - ((level.id - 1) * 200), 0);
-            tempLevel.name = level.name;
+            GameStateManager.Level tempLevel = level;
 
-            Button tempLeaderboardButton = tempLevel.GetChild(0).GetComponent<Button>();
-            Button tempLevelButton = tempLevel.GetChild(1).GetComponent<Button>();
+            Transform tempLevels = (Transform)Instantiate(levelObject);
+            tempLevels.SetParent(levelSelect.transform);
+            tempLevels.localScale = new Vector3(1, 1, 1);
+            tempLevels.localPosition = new Vector3(-350, 600 - ((tempLevel.id - 1) * 200), 0);
+            tempLevels.name = tempLevel.name;
 
-            int tempId = level.id;
+            Button tempLeaderboardButton = tempLevels.GetChild(0).GetComponent<Button>();
+            Button tempLevelButton = tempLevels.GetChild(1).GetComponent<Button>();
+
+            Text tempLevelButtonText = tempLevelButton.transform.GetChild(0).GetComponent<Text>();
+            tempLevelButtonText.text = "Personal Best: \n" + tempLevel.personalBest.ToString();
+
             tempLeaderboardButton.onClick.AddListener(delegate { Debug.Log("Add Leaderboard GUI PLz Mate"); });
-            tempLevelButton.onClick.AddListener(delegate { ChangeScene(tempId); });
+            tempLevelButton.onClick.AddListener(delegate { gameStateManager.LoadLevel(tempLevel); });
         }
     }
 
@@ -186,7 +142,7 @@ public class MainMenu : MonoBehaviour {
     {
         switch(currentMenu)
         {
-            case "Main":
+            case "MainMenu":
                 levelSelect.enabled = false;
                 mainMenu.enabled = true;
                 break;
@@ -196,13 +152,4 @@ public class MainMenu : MonoBehaviour {
                 break;
         }
     }
-
-    public void ChangeScene(int sceneIndex)
-    {
-        PlayerPrefs.SetInt("CurrentMazeID", sceneIndex);
-
-        PlayerPrefs.SetInt("CurrentMazeWidth", levels[sceneIndex-1].width);
-        PlayerPrefs.SetInt("CurrentMazeHeight", levels[sceneIndex-1].width);
-        Application.LoadLevel(1);
-    }   
 }

@@ -4,7 +4,9 @@
 [RequireComponent(typeof(MeshRenderer))]
 
 public class Maze : MonoBehaviour {
-    
+
+    public GameStateManager gameStateManager;
+
     //Maze Properties
     [Range(5,50)]
     public int mazeWidth = 20, mazeHeight = 20;
@@ -23,7 +25,6 @@ public class Maze : MonoBehaviour {
 
     //Seeding
     public string seed;
-    public bool useRandomSeed = true;
     public System.Random rand;
 
     //Meshing
@@ -45,10 +46,14 @@ public class Maze : MonoBehaviour {
     
     void Awake () {
         Screen.orientation = ScreenOrientation.Portrait;
+        gameStateManager = GameStateManager.gameStateManager;
+        gameStateManager.gameState = GameStateManager.GameStates.Play;
+
+        seed = gameStateManager.currentLevel.seed;
 
         //Load Player Prefs
-        mazeWidth = PlayerPrefs.GetInt("CurrentMazeWidth");
-        mazeHeight = PlayerPrefs.GetInt("CurrentMazeHeight");
+        mazeWidth = gameStateManager.currentLevel.width;
+        mazeHeight = gameStateManager.currentLevel.height;
 
         //Mesh Initialization
         meshFilter = GetComponent<MeshFilter>();
@@ -57,9 +62,12 @@ public class Maze : MonoBehaviour {
         material = meshRenderer.material;
 
         //Seeding Initialization
-        if (useRandomSeed)
+        if (seed == "R")
             seed = System.DateTime.Now.ToString();
+
         rand = new System.Random(seed.GetHashCode());
+
+        gameStateManager.currentLevel.seed = seed;
 
         //Player Initialization
         playerObject = new GameObject();

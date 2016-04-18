@@ -50,7 +50,7 @@ public class Player : MonoBehaviour {
 
         tmr = new Stopwatch();
 
-        gameObject.GetComponent<MeshRenderer>().material.shader = Shader.Find("Unlit/Texture");
+        gameObject.GetComponent<MeshRenderer>().material.shader = Shader.Find("JWNJWN/UnlitAlpha");
         gameObject.GetComponent<MeshRenderer>().material.SetTexture("_MainTex", playerRenderer.GetTexture());
         maze.mainCamera.orthographicSize = (maze.mazeHeight >= maze.mazeWidth) ? maze.mazeHeight : maze.mazeWidth;
         maze.mainCamera.orthographicSize = Mathf.Clamp(maze.mainCamera.orthographicSize, 5f, (maze.mazeHeight >= maze.mazeWidth) ? maze.mazeHeight : maze.mazeWidth);
@@ -121,19 +121,18 @@ public class Player : MonoBehaviour {
         }
 
         RenderMesh();
-        PlayerPrefs.SetFloat("LevelCurrentTime", tmr.ElapsedMilliseconds/1000f);
 
         if (HasWon())
         {
             tmr.Stop();
-            maze.mainCamera.GetComponent<InGame>().ChangeScene(1);
+            maze.gameStateManager.currentLevel.personalBest = tmr.ElapsedMilliseconds / 1000f;
+            maze.gameStateManager.gameState = GameStateManager.GameStates.Complete;
         }
     }
 
     void LateUpdate()
     {
         DragMove();
-
         ZoomHandle();
     }
 
